@@ -1,0 +1,11 @@
+{
+    "version": "0.0.0.0",
+    "summary": "Audio playing capabilities for elm",
+    "description": "This library provides Elm with functionalities of HTML5 Audio objects.",
+    "license": "BSD3",
+    "exposed-modules": ["Audio"],
+    "native-modules": ["Native.Audio"],
+    "elm-version": "0.12.3",
+    "dependencies": {},
+    "repository": "https://github.com/jcollard/elm-audio.git"
+}

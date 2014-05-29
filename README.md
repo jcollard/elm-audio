@@ -1,4 +1,3 @@
-elm-audio
-=========
+#Elm Audio
 
-Audio playing capabilities in Elm
+This is an elm library for interacting with HTML5 Audio
