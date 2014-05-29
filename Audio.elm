@@ -8,7 +8,7 @@ import Keyboard
 import Set
 
 {-| An Action controls how audio is heard. -}
-data Action = Play | Pause | Seek Time
+data Action = Play | Pause | Seek Time | NoChange
 
 {-| A Properties record contains information related to audio -}
 type Properties = { duration : Time, currentTime : Time, ended : Bool }
@@ -49,7 +49,8 @@ audio audioBuilder =
                      case action of
                        Play -> Native.Audio.play sound
                        Pause -> Native.Audio.pause sound
-                       Seek t -> Native.Audio.seek sound t)
+                       Seek t -> Native.Audio.seek sound t
+                       NoChange -> ())
     in Native.Audio.audio 
           handleEvent
           audioBuilder.src
