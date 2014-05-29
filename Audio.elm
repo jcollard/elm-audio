@@ -1,5 +1,7 @@
 module Audio where
 
+{-| The Audio provides an interface for playing audio -}
+
 import Native.Audio
 import Signal
 import Keyboard
@@ -18,12 +20,12 @@ data Event = TimeUpdate
            | Ended
            | Created
 
-type AudioBuilder = { src : String, 
-                      triggers : Triggers, 
-                      propertiesHandler : (Properties -> Maybe Action),
-                      actions : Signal Action }
+type Builder = { src : String, 
+                 triggers : Triggers, 
+                 propertiesHandler : (Properties -> Maybe Action),
+                 actions : Signal Action }
 
-audio : AudioBuilder -> Signal (Event, Properties)
+audio : Builder -> Signal (Event, Properties)
 audio audioBuilder =
     let handleEvent =
             (\sound action ->
