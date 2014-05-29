@@ -1,5 +1,5 @@
 {
-    "version": "0.0.0.0",
+    "version": "0.0.0.4",
     "summary": "Audio playing capabilities for elm",
     "description": "This library provides Elm with functionalities of HTML5 Audio objects.",
     "license": "BSD3",
