@@ -4,16 +4,16 @@ Elm.Native.Audio.make = function(elm) {
     elm.Native = elm.Native || {};
     elm.Native.Audio = elm.Native.Audio || {};
     if (elm.Native.Audio.values) return elm.Native.Audio.values;
-
+    
+    // Imports
     var Signal = Elm.Native.Signal.make(elm);
     var Maybe = Elm.Maybe.make(elm);
-    var audioRecords = new Array();
-    var nextID = 0;
 
     var TimeUpdate = {ctor : "TimeUpdate"};
     var Ended = {ctor : "Ended"};
     var Created = {ctor : "Created"};
 
+    // Helper Functions... Do these exist already?
     function Tuple2(fst, snd){
         return {ctor: "_Tuple2", _0 : fst, _1 : snd};
     }
@@ -23,11 +23,13 @@ Elm.Native.Audio.make = function(elm) {
     }
 
 
+    // Creates a Signal (Event, Properties)
     function audio(handler, path, alerts, propHandler, actions) {
+
         var sound = new Audio(path);
         var event = Signal.constant(Tuple2(Created, Properties(0,0,0)));
-        var handle = handler(nextID);
-        audioRecords[nextID++] = sound;
+
+        var handle = handler(sound);
         Signal.lift(handle)(actions);
 
         function addAudioListener(eventString, eventConst){
@@ -49,19 +51,16 @@ Elm.Native.Audio.make = function(elm) {
         return event;
     }
 
-    function play(id){
-        if(!audioRecords[id]) return;
-        audioRecords[id].play();
+    function play(sound){
+        sound.play();
     }
 
-    function pause(id){
-        if(!audioRecords[id]) return;
-        audioRecords[id].pause()
+    function pause(sound){
+        sound.pause()
     }
 
-    function seek(id, time){
-        if(!audioRecords[id]) return;
-        audioRecords[id].currentTime = time;
+    function seek(sound, time){
+        sound.currentTime = time;
     }
 
     return elm.Native.Audio.values = {
