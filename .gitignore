@@ -1,6 +1,2 @@
-*.*~
-build/
-elm/
-cache/
-Makefile*
-[#]*
+elm-stuff
+elm.js
