@@ -32,18 +32,22 @@ Elm.Native.Audio.make = function(elm) {
         var handle = handler(sound);
         Signal.map(handle)(actions);
 
-        function addAudioListener(eventString, eventConst){
-            sound.addEventListener(eventString, function () {
-                var props = Properties(sound.duration, sound.currentTime, sound.ended);
-                elm.notify(event.id, Tuple2(eventConst, props));
-                var action = propHandler(props);
-                if(action.ctor == "Just")
-                    handle(action._0)
-            });
+        function fireProp(eventConst){
+            var props = Properties(sound.duration, sound.currentTime, sound.ended);
+            elm.notify(event.id, Tuple2(eventConst, props));
+            var action = propHandler(props);
+            if(action.ctor == "Just")
+                handle(action._0)
+        }
+
+        function addAudioListener(eventString, eventCons){
+            sound.addEventListener(eventString, function () { fireProp(eventCons); });
         }
 
         if(alerts.timeupdate)
-            addAudioListener('timeupdate', TimeUpdate);
+        {
+            var clock = setInterval(function(){ fireProp(TimeUpdate); }, 10);
+        }
 
         if(alerts.ended)
             addAudioListener('ended', Ended);
