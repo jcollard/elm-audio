@@ -27,14 +27,14 @@ Elm.Native.Audio.make = function(elm) {
     function audio(handler, path, alerts, propHandler, actions) {
 
         var sound = new Audio(path);
+        var clock = new Object();
         var event = Signal.constant(Tuple2(Created, Properties(0,0,0)));
 
-        var handle = handler(sound);
-        Signal.map(handle)(actions);
+        var handle = handler({ "sound": sound, "clock": clock });
 
-        function fireProp(eventConst){
+        function fireProp(eventCons){
             var props = Properties(sound.duration, sound.currentTime, sound.ended);
-            elm.notify(event.id, Tuple2(eventConst, props));
+            elm.notify(event.id, Tuple2(eventCons, props));
             var action = propHandler(props);
             if(action.ctor == "Just")
                 handle(action._0)
@@ -46,25 +46,33 @@ Elm.Native.Audio.make = function(elm) {
 
         if(alerts.timeupdate)
         {
-            var clock = setInterval(function(){ fireProp(TimeUpdate); }, 10);
+            var timer;
+            clock.start = function() { timer = setInterval(function(){ fireProp(TimeUpdate); }, 10); };
+            clock.stop = function() { clearInterval(timer); };
+        } else {
+            clock.start = function() {};
+            clock.stop = function() {};
         }
 
         if(alerts.ended)
             addAudioListener('ended', Ended);
 
+        Signal.map(handle)(actions);
         return event;
     }
 
-    function play(sound){
-        sound.play();
+    function play(o){
+        o.sound.play();
+        o.clock.start();
     }
 
-    function pause(sound){
-        sound.pause()
+    function pause(o){
+        o.clock.stop();
+        o.sound.pause()
     }
 
-    function seek(sound, time){
-        sound.currentTime = time;
+    function seek(o, time){
+        o.sound.currentTime = time;
     }
 
     return elm.Native.Audio.values = {
