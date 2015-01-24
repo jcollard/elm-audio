@@ -1,12 +1,14 @@
 import Audio
 import Audio(defaultTriggers)
-import Signal
+import Signal (..)
 import Keyboard
 import Char
 import Text
+import Graphics.Element (..)
+import List
 
 -- We are either Playing or Not Playing
-type State = { playing : Bool }
+type alias State = { playing : Bool }
 
 -- We start by not Playing
 initialState : State
@@ -46,12 +48,13 @@ builder = Audio.audio { src = "snd/theme.mp3",
 display : (State, (Audio.Event, Audio.Properties)) -> Element
 display (state, (event, properties)) =
     let playing = if state.playing then "Playing" else "Paused"
-        progress = "Current Time: " ++ show (properties.currentTime)
-        duration = "Duration: " ++ show (properties.duration)
-    in flow down <| map (Text.leftAligned . Text.toText) 
-           ["Tap 'P' to toggle between playing and paused.", 
-            playing,
-            progress,
-            duration]
+        progress = "Current Time: " ++ toString (properties.currentTime)
+        duration = "Duration: " ++ toString (properties.duration)
+    in flow down <| List.map (Text.leftAligned << Text.fromString)
+           [ "Tap 'P' to toggle between playing and paused."
+           , playing
+           , progress
+           , duration
+           ]
 
 main = let output = (,) <~ stateful ~ builder in display <~ output

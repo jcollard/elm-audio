@@ -30,14 +30,14 @@ Elm.Native.Audio.make = function(elm) {
         var event = Signal.constant(Tuple2(Created, Properties(0,0,0)));
 
         var handle = handler(sound);
-        Signal.lift(handle)(actions);
+        Signal.map(handle)(actions);
 
         function addAudioListener(eventString, eventConst){
             sound.addEventListener(eventString, function () {
                 var props = Properties(sound.duration, sound.currentTime, sound.ended);
                 elm.notify(event.id, Tuple2(eventConst, props));
                 var action = propHandler(props);
-                if(Maybe.isJust(action))
+                if(action.ctor == "Just")
                     handle(action._0)
             });
         }
