@@ -6,7 +6,7 @@ import Native.Audio
 import Signal
 import Keyboard
 import Set
-import Time (Time)
+import Time exposing (Time)
 
 {-| An Action controls how audio is heard. -}
 type Action = Play | Pause | Seek Time | NoChange
