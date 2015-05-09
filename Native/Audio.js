@@ -56,7 +56,7 @@ Elm.Native.Audio.make = function(elm) {
         if(alerts.ended)
             addAudioListener('ended', Ended);
 
-        A2(Signal.map,handle,actions);
+        Signal.output('audio-handler',handle,actions);
         return event;
     }
 
