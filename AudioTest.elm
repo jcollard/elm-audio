@@ -1,10 +1,10 @@
 import Audio
-import Audio(defaultTriggers)
-import Signal (..)
+import Audio exposing (defaultTriggers)
+import Signal exposing (..)
 import Keyboard
 import Char
 import Text
-import Graphics.Element (..)
+import Graphics.Element exposing (..)
 import List
 
 -- We are either Playing or Not Playing
@@ -23,7 +23,7 @@ update key state =
 
 -- Be Stateful!
 stateful : Signal State
-stateful = foldp update initialState Keyboard.lastPressed 
+stateful = foldp update initialState Keyboard.presses 
 
 -- If we've reached 37.6 seconds into the piece, jump to 0.05.
 propertiesHandler : Audio.Properties -> Maybe Audio.Action
@@ -50,7 +50,7 @@ display (state, (event, properties)) =
     let playing = if state.playing then "Playing" else "Paused"
         progress = "Current Time: " ++ toString (properties.currentTime)
         duration = "Duration: " ++ toString (properties.duration)
-    in flow down <| List.map (Text.leftAligned << Text.fromString)
+    in flow down <| List.map (leftAligned << Text.fromString)
            [ "Tap 'P' to toggle between playing and paused."
            , playing
            , progress
