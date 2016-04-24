@@ -22,7 +22,6 @@ Elm.Native.Audio.make = function(elm) {
         return { _ : {}, duration : duration, currentTime : currentTime, ended : ended};
     }
 
-
     // Creates a Signal (Event, Properties)
     function audio(handler, path, alerts, propHandler, actions) {
 
@@ -57,7 +56,7 @@ Elm.Native.Audio.make = function(elm) {
         if(alerts.ended)
             addAudioListener('ended', Ended);
 
-        Signal.map(handle)(actions);
+        Signal.output('audio-handler',handle,actions);
         return event;
     }
 
